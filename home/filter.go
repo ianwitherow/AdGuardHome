@@ -542,6 +542,7 @@ func (f *Filtering) updateIntl(filter *filter) (bool, error) {
 			log.Printf("Got status code %d from URL %s, skipping", resp.StatusCode, filter.URL)
 			return false, fmt.Errorf("got status code != 200: %d", resp.StatusCode)
 		}
+		reader = resp.Body
 	}
 
 	htmlTest := true
