@@ -505,6 +505,7 @@ func (f *Filtering) update(filter *filter) (bool, error) {
 	return b, err
 }
 
+// nolint(gocyclo)
 func (f *Filtering) updateIntl(filter *filter) (bool, error) {
 	log.Tracef("Downloading update for filter %d from %s", filter.ID, filter.URL)
 
