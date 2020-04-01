@@ -327,6 +327,19 @@ func (d *Dnsfilter) CheckHost(host string, qtype uint16, setts *RequestFiltering
 			return result, err
 		}
 		if result.Reason.Matched() {
+
+			if result.IsFiltered {
+				// Switch to rewrite instead
+				result.Reason = ReasonRewrite
+				result.IPList = append(result.IPList, net.ParseIP("192.168.1.75"))
+				//result.CanonName = "redirectsink.com"
+				result.IsFiltered = false
+				result.FilterID = 0
+				result.Rule = ""
+				log.Info("My rewrite result:")
+				fmt.Println(result)
+			}
+
 			return result, nil
 		}
 	}
@@ -412,6 +425,11 @@ func (d *Dnsfilter) processRewrites(host string) Result {
 			res.IPList = append(res.IPList, r.IP)
 			log.Debug("Rewrite: A/AAAA for %s is %s", host, r.IP)
 		}
+	}
+
+	if res.Reason != NotFilteredNotFound {
+		log.Info("Actual rewrite result:")
+		fmt.Println(res)
 	}
 
 	return res
